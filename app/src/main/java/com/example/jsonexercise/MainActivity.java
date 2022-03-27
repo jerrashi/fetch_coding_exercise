@@ -82,14 +82,18 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(!data.isEmpty()){
-                    JSONObject jsonObject = new JSONObject(data);
+                    JSONArray users = new JSONArray(data);
                     //there is no parent node in the json from URL
-                    JSONArray users = jsonObject.getJSONArray("hiring");
+                    //JSONArray users = jsonArray.getJSONObject("hiring");
                     userList.clear();
                     for (int i = 0; i<users.length(); i++){
                         JSONObject names = users.getJSONObject(i);
                         String name = names.getString("name");
-                        userList.add(name);
+                        String listId = names.getString("listId");
+                        String id = names.getString("id");
+                        if ((name != null ) && (name != "")) {
+                            userList.add(name);
+                        }
                     }
                 }
             } catch (IOException | JSONException e) {
