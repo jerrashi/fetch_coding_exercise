@@ -21,7 +21,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Array;
 import java.util.ArrayList;
-import java.util.logging.Handler;
+import android.os.Handler;
+import com.example.jsonexercise.databinding.ActivityMainBinding;
 import java.util.logging.LogRecord;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,16 +32,6 @@ public class MainActivity extends AppCompatActivity {
     Handler mainHandler = new Handler();
     ArrayAdapter<String> listAdapter;
     ProgressDialog progressDialog;
-
-        @Override
-        public void flush() {
-
-        }
-
-        @Override
-        public void close() throws SecurityException {
-
-        }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 new fetchData().start();
             }
-        })
+        });
     }
 
     private void initializeUserlist() {
