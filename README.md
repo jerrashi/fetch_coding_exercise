@@ -10,3 +10,4 @@ The list of datas is displayed to the user to fulfill the following requirements
 1. Download the files onto your machine.
 2. Build the project in android studio.
 3. Launch the app in either a virtual device emulator or a connected android device.
+4. Tap the "fetch data" button to retrieve data from the provided URL
