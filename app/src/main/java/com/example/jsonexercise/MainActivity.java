@@ -21,11 +21,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
+    //TreeMap same as dictionary in python
     ArrayList<String> userList;
+    TreeMap<String, TreeMap<String, Item>> itemData = new TreeMap<String, TreeMap<String, Item>>();
     Handler mainHandler = new Handler();
     ArrayAdapter<String> listAdapter;
     ProgressDialog progressDialog;
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeUserlist() {
-            userList = new ArrayList<>();
+            userList = new ArrayList();
             listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
                     userList);
             binding.userList.setAdapter(listAdapter);
@@ -85,14 +88,21 @@ public class MainActivity extends AppCompatActivity {
                     userList.clear();
                     for (int i = 0; i<users.length(); i++){
                         JSONObject names = users.getJSONObject(i);
-                        String name = names.getString("name");
-                        String listId = names.getString("listId");
-                        String id = names.getString("id");
-                        if (!(name == null || name.isEmpty())) {
-                            //condition name == null is always false
-                            //name.equals(empty) creates added variable(s) does not support value
-                            // initialization error
-                            userList.add(name);
+                        Item item = new Item();
+                        item.name = names.getString("name");
+                        item.listid = names.getString("listId");
+                        item.id = names.getString("id");
+
+                        if (!(item.name == "null" || item.name.isEmpty())) {
+                            loadData(item);
+                        }
+                    }
+
+                    for(String listId: itemData.keySet()) {
+                        TreeMap<String, Item> names = itemData.get(listId);
+                        for (String name : names.keySet()) {
+                            Item item = names.get(name);
+                            userList.add("List Id: " + item.listid + " | Name:" + item.name);
                         }
                     }
                 }
@@ -110,5 +120,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void loadData(Item newitem) {
+        TreeMap namemap = itemData.get(newitem.listid);
+        if(namemap == null){
+            //if the listid is not a key in treemap, then create a new treemap
+            namemap = new TreeMap<String, Item>();
+        }
+        //item is name key, the value is treemap namemap
+        namemap.put(newitem.name, namemap);
+
+        itemData.put(newitem.listid, namemap);
     }
 }
