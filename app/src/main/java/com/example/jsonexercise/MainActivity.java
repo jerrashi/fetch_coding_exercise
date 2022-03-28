@@ -29,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     //TreeMap same as dictionary in python
     ArrayList<String> userList;
     TreeMap<String, TreeMap<String, Item>> itemData = new TreeMap<String, TreeMap<String, Item>>();
+    //TODO replace string key in second treemap with int
+    //TODO parse and trim each name string to remove "item "
+    //TODO convert name from string to int
     Handler mainHandler = new Handler();
     ArrayAdapter<String> listAdapter;
     ProgressDialog progressDialog;
@@ -129,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             namemap = new TreeMap<String, Item>();
         }
         //item is name key, the value is treemap namemap
-        namemap.put(newitem.name, namemap);
+        namemap.put(newitem.name, newitem);
 
         itemData.put(newitem.listid, namemap);
     }
