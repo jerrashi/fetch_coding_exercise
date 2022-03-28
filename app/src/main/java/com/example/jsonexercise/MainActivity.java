@@ -1,12 +1,14 @@
 package com.example.jsonexercise;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.jsonexercise.databinding.ActivityMainBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,13 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Array;
 import java.util.ArrayList;
-import android.os.Handler;
-import com.example.jsonexercise.databinding.ActivityMainBinding;
-import java.util.logging.LogRecord;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.activity_main);
+        setContentView(binding.getRoot());
         initializeUserlist();
         binding.fetchDataBttn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -49,13 +46,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeUserlist() {
             userList = new ArrayList<>();
-            listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, userList);
+            listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+                    userList);
             binding.userList.setAdapter(listAdapter);
     }
 
     class fetchData extends Thread{
 
         String data = "";
+        //String empty = null;
 
         @Override
         public void run(){
@@ -83,15 +82,16 @@ public class MainActivity extends AppCompatActivity {
 
                 if(!data.isEmpty()){
                     JSONArray users = new JSONArray(data);
-                    //there is no parent node in the json from URL
-                    //JSONArray users = jsonArray.getJSONObject("hiring");
                     userList.clear();
                     for (int i = 0; i<users.length(); i++){
                         JSONObject names = users.getJSONObject(i);
                         String name = names.getString("name");
                         String listId = names.getString("listId");
                         String id = names.getString("id");
-                        if ((name != null ) && (name != "")) {
+                        if (!(name == null || name.isEmpty())) {
+                            //condition name == null is always false
+                            //name.equals(empty) creates added variable(s) does not support value
+                            // initialization error
                             userList.add(name);
                         }
                     }
